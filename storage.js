@@ -20,7 +20,7 @@ function storage(event){
         email:email,
         phone:contact
     }
-    axios.post("https://crudcrud.com/api/cbd93a6cd6544a79b5f71a949da42b39/AppoinmentApp",obj)
+    axios.post("https://crudcrud.com/api/9e94bff09b374b0998a416a253b0f1d5/crud",obj)
     .then((res)=>{
         showUserOnScreen(res.data)  
         console.log(res.data)
@@ -35,7 +35,7 @@ function storage(event){
     // showUserOnScreen(obj)  
 }
 window.addEventListener("DOMContentLoaded",()=>{
-    axios.get("https://crudcrud.com/api/cbd93a6cd6544a79b5f71a949da42b39/AppoinmentApp")
+    axios.get("https://crudcrud.com/api/9e94bff09b374b0998a416a253b0f1d5/crud")
     .then((res)=>{
         console.log(res)
 
@@ -61,10 +61,19 @@ function showUserOnScreen(obj){
     childEle.appendChild(deleteBut);
     ParentEle.appendChild(childEle)
 
-    deleteBut.onclick=()=>{
-            localStorage.removeItem(obj.userdetail);
-            ParentEle.removeChild(childEle)
-    }
+    deleteBut.addEventListener('click',deleteuser)
+        function deleteuser(){
+            {
+                axios.delete(`https://crudcrud.com/api/9e94bff09b374b0998a416a253b0f1d5/crud/${obj._id}`)
+                .then(()=>{
+                    ParentEle.removeChild(childEle)
+                })
+                .catch((err)=>{
+                    console.log(err)
+                })
+        }
+        }
+            
 
 
     //Edit button and functionality
@@ -78,10 +87,21 @@ function showUserOnScreen(obj){
 
    
     editbut.onclick=()=>{
-        localStorage.removeItem(obj.userdetail);
-        ParentEle.removeChild(childEle)
+        // localStorage.removeItem(obj.userdetail);
+        // ParentEle.removeChild(childEle)
          let name=  document.getElementById('name').value=obj.name;
          document.getElementById('email').value=obj.email;
          document.getElementById('phone').value=obj.phone
+
+
+         axios.put(`https://crudcrud.com/api/9e94bff09b374b0998a416a253b0f1d5/crud/${obj._id}`,obj)
+         .then((res)=>{
+            console.log('updated:',res.data)
+         })
+         .catch((err)=>{
+            console.log(err)
+         })
+
+         deleteuser()
     }
 }
